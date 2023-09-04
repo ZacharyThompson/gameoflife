@@ -8,6 +8,8 @@
 #define CELLSIZE 10
 #define CELLSPERROW (SCREENSIZE/CELLSIZE)
 
+// TODO: Fix horizontal boundary
+
 void updateGame(bool *cells, bool *successor) {
 	int neighborIndex;
 	int liveNeighbors;
@@ -37,10 +39,10 @@ int main() {
 	bool *cells = calloc(CELLSPERROW*CELLSPERROW, sizeof(bool));
 	bool *successor = calloc(CELLSPERROW*CELLSPERROW, sizeof(bool));
 	cells[1] = true;
-	cells[82] = true;
-	cells[160] = true;
-	cells[161] = true;
-	cells[162] = true;
+	cells[CELLSPERROW+2] = true;
+	cells[CELLSPERROW*2] = true;
+	cells[CELLSPERROW*2+1] = true;
+	cells[CELLSPERROW*2+2] = true;
 
 	InitWindow(SCREENSIZE, SCREENSIZE, "Game of Life");
 	SetTargetFPS(15);
