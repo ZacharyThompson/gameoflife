@@ -45,14 +45,28 @@ void updateGame(bool *cells, bool *successor) {
 int main() {
 	bool *cells = calloc(CELLSPERROW*CELLSPERROW, sizeof(bool));
 	bool *successor = calloc(CELLSPERROW*CELLSPERROW, sizeof(bool));
-	cells[81] = true;
-	cells[162] = true;
-	cells[240] = true;
-	cells[241] = true;
-	cells[242] = true;
 
+	/*
+	cells[1] = true;
+	cells[82] = true;
+	cells[160] = true;
+	cells[161] = true;
+	cells[162] = true;
+	*/
+
+	size_t voffset = 20*80;
+	size_t hoffset = 20;
+	cells[1+voffset+hoffset] = true;
+	cells[2+voffset+hoffset] = true;
+	cells[80+voffset+hoffset] = true;
+	cells[81+voffset+hoffset] = true;
+	cells[161+voffset+hoffset] = true;
+
+	float simulationRate = 50.0f; // updates/s
+	float deltaTime = 0.0f;
+	float sinceLastUpdate = 0.0f;
 	InitWindow(SCREENSIZE, SCREENSIZE, "Game of Life");
-	SetTargetFPS(15);
+	SetTargetFPS(60);
 	while (!WindowShouldClose()) {
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
@@ -65,10 +79,15 @@ int main() {
 		}
 		EndDrawing();
 
-		updateGame(cells, successor);
-		bool *tmp = cells;
-		cells = successor;
-		successor = tmp;
+		deltaTime = GetFrameTime();
+		sinceLastUpdate += deltaTime;
+		if (sinceLastUpdate >= 1/simulationRate) {
+			updateGame(cells, successor);
+			sinceLastUpdate = 0;
+			bool *tmp = cells;
+			cells = successor;
+			successor = tmp;
+		}
 	}
 	free(cells);
 	free(successor);

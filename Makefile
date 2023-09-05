@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -ggdb $(shell pkg-config --cflags raylib)
+CFLAGS = -Wall -Wextra -ggdb $(shell pkg-config --cflags raylib)
 LDLIBS = $(shell pkg-config --libs raylib)
 
 all:
