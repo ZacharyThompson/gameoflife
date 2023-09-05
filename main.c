@@ -65,9 +65,15 @@ int main() {
 	float simulationRate = 50.0f; // updates/s
 	float deltaTime = 0.0f;
 	float sinceLastUpdate = 0.0f;
+	bool paused = false;
 	InitWindow(SCREENSIZE, SCREENSIZE, "Game of Life");
 	SetTargetFPS(60);
 	while (!WindowShouldClose()) {
+		if (paused) {
+			paused = !IsKeyPressed(KEY_P);
+		} else {
+			paused = IsKeyPressed(KEY_P);
+		}
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 		for(int i = 0; i < CELLSPERROW*CELLSPERROW; i++) {
@@ -81,7 +87,7 @@ int main() {
 
 		deltaTime = GetFrameTime();
 		sinceLastUpdate += deltaTime;
-		if (sinceLastUpdate >= 1/simulationRate) {
+		if (sinceLastUpdate >= 1/simulationRate && !paused) {
 			updateGame(cells, successor);
 			sinceLastUpdate -= 1/simulationRate;
 			bool *tmp = cells;
@@ -89,6 +95,7 @@ int main() {
 			successor = tmp;
 		}
 	}
+
 	free(cells);
 	free(successor);
 	return 0;
