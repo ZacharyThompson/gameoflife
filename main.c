@@ -83,7 +83,7 @@ int main() {
 		sinceLastUpdate += deltaTime;
 		if (sinceLastUpdate >= 1/simulationRate) {
 			updateGame(cells, successor);
-			sinceLastUpdate = 0;
+			sinceLastUpdate -= 1/simulationRate;
 			bool *tmp = cells;
 			cells = successor;
 			successor = tmp;
