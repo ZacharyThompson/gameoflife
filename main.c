@@ -115,6 +115,7 @@ int main() {
 		}
 		if (IsKeyPressed(KEY_SPACE)) {
 			cells[cursor] = true;
+			initial[cursor] = true;
 		}
 		if (IsKeyPressed(KEY_X)) {
 			memset(cells, 0, sizeof(bool)*TOTALCELLS);
