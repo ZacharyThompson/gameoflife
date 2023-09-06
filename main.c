@@ -63,32 +63,33 @@ int main() {
 	bool *successor = calloc(TOTALCELLS, sizeof(bool));
 	bool *initial = calloc(TOTALCELLS, sizeof(bool));
 
-	/*
-	   cells[1] = true;
-	   cells[82] = true;
-	   cells[160] = true;
-	   cells[161] = true;
-	   cells[162] = true;
-	   */
-
-	size_t voffset = 30 * 80;
-	size_t hoffset = 50;
-	cells[1 + voffset + hoffset] = true;
-	cells[2 + voffset + hoffset] = true;
-	cells[80 + voffset + hoffset] = true;
-	cells[81 + voffset + hoffset] = true;
-	cells[161 + voffset + hoffset] = true;
+	// Amongus pattern produces pretty complex results.
+	int center = (TOTALCELLS/2) + (CELLSPERROW/2);
+	cells[center] = true;
+	cells[center+1] = true;
+	cells[center+2] = true;
+	cells[center+CELLSPERROW-1] = true;
+	cells[center+CELLSPERROW] = true;
+	cells[center+2*CELLSPERROW-1] = true;
+	cells[center+2*CELLSPERROW] = true;
+	cells[center+2*CELLSPERROW+1] = true;
+	cells[center+2*CELLSPERROW+2] = true;
+	cells[center+3*CELLSPERROW] = true;
+	cells[center+3*CELLSPERROW+1] = true;
+	cells[center+3*CELLSPERROW+2] = true;
+	cells[center+4*CELLSPERROW] = true;
+	cells[center+4*CELLSPERROW+2] = true;
 
 	memcpy(initial, cells, sizeof(bool) * TOTALCELLS);
 
 	float simulationRate = 50.0f;  // updates/s
 	float deltaTime = 0.0f;
 	float sinceLastUpdate = 0.0f;
-	bool paused = false;
+	bool paused = true;
 	int cursor = 0;
 	bool cursorEnabled = true;
 
-	InitWindow(SCREENSIZE, SCREENSIZE, "Game of Life");
+	InitWindow(SCREENSIZE, SCREENSIZE+50, "Game of Life");
 	SetTargetFPS(60);
 	while (!WindowShouldClose()) {
 		// Check keyboard input
@@ -136,6 +137,7 @@ int main() {
 			DrawRectangle(cursorRow * CELLSIZE, cursorCol * CELLSIZE,
 				      CELLSIZE, CELLSIZE, RED);
 		}
+		DrawText("P - Pause, X - Clear, Up/Down/Left/Right - Move Cursor\nSpace - Set Cell to Alive", 20, SCREENSIZE, 20, BLACK);
 		EndDrawing();
 
 		// Update game state
