@@ -47,6 +47,17 @@ void updateGame(bool *cells, bool *successor) {
 	}
 }
 
+int moveCursor(int cursor, int n) {
+	cursor += n;
+	if (cursor < 0) {
+		return 0;
+	}
+	if (cursor >= TOTALCELLS) {
+		return TOTALCELLS-1;
+	}
+	return cursor;
+}
+
 int main() {
 	bool *cells = calloc(TOTALCELLS, sizeof(bool));
 	bool *successor = calloc(TOTALCELLS, sizeof(bool));
@@ -74,9 +85,13 @@ int main() {
 	float deltaTime = 0.0f;
 	float sinceLastUpdate = 0.0f;
 	bool paused = false;
+	int cursor = 0;
+	bool cursorEnabled = true;
+
 	InitWindow(SCREENSIZE, SCREENSIZE, "Game of Life");
 	SetTargetFPS(60);
 	while (!WindowShouldClose()) {
+		// Check keyboard input
 		if (paused) {
 			paused = !IsKeyPressed(KEY_P);
 		} else {
@@ -85,6 +100,26 @@ int main() {
 		if (IsKeyPressed(KEY_R)) {
 			memcpy(cells, initial, sizeof(bool) * TOTALCELLS);
 		}
+		if (IsKeyPressed(KEY_UP)) {
+			cursor = moveCursor(cursor, -CELLSPERROW);
+		}
+		if (IsKeyPressed(KEY_DOWN)) {
+			cursor = moveCursor(cursor, CELLSPERROW);
+		}
+		if (IsKeyPressed(KEY_LEFT)) {
+			cursor = moveCursor(cursor, -1);
+		}
+		if (IsKeyPressed(KEY_RIGHT)) {
+			cursor = moveCursor(cursor, 1);
+		}
+		if (IsKeyPressed(KEY_SPACE)) {
+			cells[cursor] = true;
+		}
+		if (IsKeyPressed(KEY_X)) {
+			memset(cells, 0, sizeof(bool)*TOTALCELLS);
+		}
+
+		// Draw
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 		for (int i = 0; i < TOTALCELLS; i++) {
@@ -95,8 +130,15 @@ int main() {
 					      CELLSIZE, CELLSIZE, BLACK);
 			}
 		}
+		int cursorRow = cursor % CELLSPERROW;
+		int cursorCol = cursor / CELLSPERROW;
+		if (cursorEnabled) {
+			DrawRectangle(cursorRow * CELLSIZE, cursorCol * CELLSIZE,
+				      CELLSIZE, CELLSIZE, RED);
+		}
 		EndDrawing();
 
+		// Update game state
 		deltaTime = GetFrameTime();
 		sinceLastUpdate += deltaTime;
 		if (sinceLastUpdate >= 1 / simulationRate && !paused) {
