@@ -138,7 +138,7 @@ int main() {
 			DrawRectangle(cursorRow * CELLSIZE, cursorCol * CELLSIZE,
 				      CELLSIZE, CELLSIZE, RED);
 		}
-		DrawText("P - Pause, X - Clear, Up/Down/Left/Right - Move Cursor\nSpace - Set Cell to Alive", 20, SCREENSIZE, 20, BLACK);
+		DrawText("P - Pause, X - Clear, R - Reset\nUp/Down/Left/Right - Move Cursor, Space - Set Cell to Alive", 20, SCREENSIZE, 20, BLACK);
 		EndDrawing();
 
 		// Update game state
