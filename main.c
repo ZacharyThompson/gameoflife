@@ -93,32 +93,35 @@ int main() {
 	SetTargetFPS(60);
 	while (!WindowShouldClose()) {
 		// Check keyboard input
-		if (paused) {
-			paused = !IsKeyPressed(KEY_P);
-		} else {
-			paused = IsKeyPressed(KEY_P);
-		}
-		if (IsKeyPressed(KEY_R)) {
-			memcpy(cells, initial, sizeof(bool) * TOTALCELLS);
-		}
-		if (IsKeyPressed(KEY_UP)) {
-			cursor = moveCursor(cursor, -CELLSPERROW);
-		}
-		if (IsKeyPressed(KEY_DOWN)) {
-			cursor = moveCursor(cursor, CELLSPERROW);
-		}
-		if (IsKeyPressed(KEY_LEFT)) {
-			cursor = moveCursor(cursor, -1);
-		}
-		if (IsKeyPressed(KEY_RIGHT)) {
-			cursor = moveCursor(cursor, 1);
-		}
-		if (IsKeyPressed(KEY_SPACE)) {
-			cells[cursor] = true;
-			initial[cursor] = true;
-		}
-		if (IsKeyPressed(KEY_X)) {
-			memset(cells, 0, sizeof(bool)*TOTALCELLS);
+		int key;
+		while ((key = GetKeyPressed())) {
+			switch (key) {
+				case KEY_P:
+					paused = !paused;
+					break;
+				case KEY_R:
+					memcpy(cells, initial, sizeof(bool) * TOTALCELLS);
+					break;
+				case KEY_UP:
+					cursor = moveCursor(cursor, -CELLSPERROW);
+					break;
+				case KEY_DOWN:
+					cursor = moveCursor(cursor, CELLSPERROW);
+					break;
+				case KEY_LEFT:
+					cursor = moveCursor(cursor, -1);
+					break;
+				case KEY_RIGHT:
+					cursor = moveCursor(cursor, 1);
+					break;
+				case KEY_SPACE:
+					cells[cursor] = true;
+					initial[cursor] = true;
+					break;
+				case KEY_X:
+					memset(cells, 0, sizeof(bool)*TOTALCELLS);
+					break;
+			}
 		}
 
 		// Draw
